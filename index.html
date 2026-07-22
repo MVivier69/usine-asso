@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L'Usine — Belleville en Beaujolais</title>
+<meta name="theme-color" content="#2D170C">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>
+  /* Les couleurs réelles sont injectées depuis config.js ; ces valeurs
+     ne servent que de repli si config.js n'a pas pu être chargé. */
+  :root{
+    --encre:#2D170C; --bronze:#A87848; --brun:#7A5230;
+    --fond:#F8F1E1;  --carte:#FFFFFF;  --trait:#E4D8C2; --grise:#6B5A48;
+    --rayon:14px; --marge:16px; --largeur:640px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--fond); color:var(--encre);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px; line-height:1.45;
+    -webkit-text-size-adjust:100%;
+    padding:0 var(--marge) calc(28px + env(safe-area-inset-bottom));
+  }
+  .zone{max-width:var(--largeur); margin:0 auto;}
+
+  /* --- En-tête --------------------------------------------------- */
+  .entete{padding:calc(14px + env(safe-area-inset-top)) 0 4px; text-align:center;}
+  .entete a{display:inline-flex; align-items:center; gap:12px; text-decoration:none; color:inherit;}
+  .entete img.logo{width:52px; height:52px; object-fit:contain; flex:0 0 auto;}
+  .entete .mots{text-align:left; min-width:0;}
+  .entete h1{margin:0; font-size:1.32rem; font-weight:700; letter-spacing:.01em;}
+  .entete p{margin:1px 0 0; font-size:.86rem; color:var(--grise);}
+  .banniere{
+    display:block; width:100%; height:auto; margin:12px 0 4px;
+    border-radius:var(--rayon); border:1px solid var(--trait);
+    background:var(--carte);
+  }
+
+  /* --- Titres de section ----------------------------------------- */
+  h2{
+    margin:26px 0 10px; font-size:.78rem; font-weight:700;
+    letter-spacing:.13em; text-transform:uppercase; color:var(--brun);
+  }
+
+  /* --- À la une --------------------------------------------------- */
+  .une{
+    display:block; background:var(--carte); border:1px solid var(--trait);
+    border-radius:var(--rayon); overflow:hidden; text-decoration:none; color:inherit;
+  }
+  .une img{display:block; width:100%; height:190px; object-fit:cover;}
+  .une .corps{padding:13px 15px 15px;}
+  .une .date{
+    display:inline-block; font-size:.74rem; font-weight:700; letter-spacing:.06em;
+    text-transform:uppercase; color:#FFFFFF; background:var(--brun);
+    padding:4px 9px; border-radius:999px; margin-bottom:8px;
+  }
+  .une h3{margin:0; font-size:1.1rem; font-weight:700; overflow-wrap:anywhere;}
+  .une .txt{margin:6px 0 0; font-size:.93rem; color:var(--grise);}
+
+  /* --- Pavés ------------------------------------------------------ */
+  .paves{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px;}
+  .pave{
+    display:flex; flex-direction:column; min-width:0;
+    background:var(--carte); border:1px solid var(--trait);
+    border-radius:var(--rayon); overflow:hidden;
+    text-decoration:none; color:inherit;
+  }
+  .pave img{display:block; width:100%; height:96px; object-fit:cover;}
+  .pave .lib{
+    padding:11px 12px; font-size:.95rem; font-weight:600;
+    overflow-wrap:anywhere; hyphens:auto;
+  }
+  .pave .lib::after{content:" ›"; color:var(--bronze); font-weight:700;}
+  .pave.large{grid-column:1 / -1; flex-direction:row; align-items:center;}
+  .pave.large .lib{padding:14px 15px;}
+  /* variante vignette */
+  .paves.vignette .pave{flex-direction:row; align-items:center; gap:0;}
+  .paves.vignette .pave img{width:46px; height:46px; margin:10px 0 10px 10px; border-radius:8px; flex:0 0 auto;}
+  .paves.vignette .pave .lib{padding:10px 12px;}
+
+  /* --- Galerie ---------------------------------------------------- */
+  .galerie{display:grid; gap:8px;}
+  .vign{
+    display:block; min-width:0; background:var(--carte);
+    border:1px solid var(--trait); border-radius:10px; overflow:hidden;
+    text-decoration:none; color:inherit;
+  }
+  .vign img{display:block; width:100%; aspect-ratio:1/1; object-fit:cover;}
+  .vign .leg{padding:6px 8px; font-size:.78rem; color:var(--grise); text-align:center;}
+  .bouton{
+    display:block; margin-top:10px; padding:12px 14px; text-align:center;
+    background:var(--brun); color:#FFFFFF; text-decoration:none;
+    border-radius:var(--rayon); font-weight:600; font-size:.95rem;
+  }
+
+  /* --- Infos pratiques -------------------------------------------- */
+  .infos{
+    background:var(--carte); border:1px solid var(--trait);
+    border-radius:var(--rayon); overflow:hidden;
+  }
+  .ligne{
+    display:flex; align-items:center; gap:12px; min-width:0;
+    padding:12px 14px; text-decoration:none; color:inherit;
+    border-top:1px solid var(--trait);
+  }
+  .ligne:first-child{border-top:0;}
+  .ligne .ic{font-size:1.2rem; flex:0 0 auto; line-height:1;}
+  .ligne .tx{min-width:0;}
+  .ligne .t{font-weight:600; font-size:.95rem;}
+  .ligne .d{font-size:.87rem; color:var(--grise); overflow-wrap:anywhere;}
+
+  /* --- Liens ------------------------------------------------------ */
+  .liens{display:grid; gap:8px;}
+  .lien{
+    display:block; padding:13px 14px; text-align:center;
+    background:var(--carte); border:1px solid var(--trait);
+    border-radius:var(--rayon); text-decoration:none;
+    color:var(--brun); font-weight:600; font-size:.95rem;
+    overflow-wrap:anywhere;
+  }
+
+  /* --- Pied de page ----------------------------------------------- */
+  footer{margin-top:26px; text-align:center; font-size:.82rem; color:var(--grise);}
+  footer a{color:var(--brun);}
+
+  @media (min-width:520px){
+    .pave img{height:120px;}
+    .une img{height:230px;}
+  }
+  @media (prefers-reduced-motion:no-preference){
+    a{transition:opacity .12s ease;}
+    a:active{opacity:.65;}
+  }
+</style>
+</head>
+<body>
+<main class="zone" id="app"></main>
+
+<script src="./config.js"></script>
+<script>
+(function(){
+  "use strict";
+  var C = window.USINE_CONFIG;
+  var app = document.getElementById("app");
+
+  if (!C) {
+    app.innerHTML = '<p style="padding:24px 0">Le fichier <b>config.js</b> n\'a pas pu être chargé.</p>';
+    return;
+  }
+
+  /* Échappement : tout texte venant de config.js est neutralisé. */
+  function e(s){
+    return String(s == null ? "" : s)
+      .replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+  }
+  function externe(url){ return /^https?:/i.test(url) ? ' target="_blank" rel="noopener"' : ''; }
+  function bloc(html){ var d=document.createElement("div"); d.innerHTML=html; app.appendChild(d); }
+
+  /* Couleurs */
+  if (C.couleurs) {
+    var r = document.documentElement.style;
+    var map = {encre:"--encre",bronze:"--bronze",brun:"--brun",fond:"--fond",carte:"--carte",trait:"--trait",grise:"--grise"};
+    for (var k in map){ if (C.couleurs[k]) r.setProperty(map[k], C.couleurs[k]); }
+  }
+  if (C.titreOnglet) document.title = C.titreOnglet;
+
+  /* --- En-tête --- */
+  var h = C.entete || {};
+  var inter = h.lienEntete
+    ? '<a href="'+e(h.lienEntete)+'"'+externe(h.lienEntete)+'>{X}</a>'
+    : '<span style="display:inline-flex;align-items:center;gap:12px">{X}</span>';
+  var contenu =
+    (h.logo ? '<img class="logo" src="'+e(h.logo)+'" alt="">' : '') +
+    '<span class="mots"><h1>'+e(h.titre||"")+'</h1>' +
+    (h.sousTitre ? '<p>'+e(h.sousTitre)+'</p>' : '') + '</span>';
+  bloc('<header class="entete">' + inter.replace("{X}", contenu) +
+       (h.banniere ? '<img class="banniere" src="'+e(h.banniere)+'" alt="">' : '') +
+       '</header>');
+
+  /* --- À la une --- */
+  var u = C.alaune;
+  if (u && u.afficher) {
+    var corps =
+      (u.image ? '<img src="'+e(u.image)+'" alt="" loading="lazy">' : '') +
+      '<div class="corps">' +
+      (u.date  ? '<span class="date">'+e(u.date)+'</span>' : '') +
+      (u.titre ? '<h3>'+e(u.titre)+'</h3>' : '') +
+      (u.texte ? '<p class="txt">'+e(u.texte)+'</p>' : '') +
+      '</div>';
+    bloc('<section>' + (u.titreSection ? '<h2>'+e(u.titreSection)+'</h2>' : '') +
+      (u.lien ? '<a class="une" href="'+e(u.lien)+'"'+externe(u.lien)+'>'+corps+'</a>'
+              : '<div class="une">'+corps+'</div>') + '</section>');
+  }
+
+  /* --- Association (pavés) --- */
+  var a = C.asso;
+  if (a && a.afficher && a.paves && a.paves.length) {
+    var vign = (a.styleImage === "vignette");
+    var html = '<section>' + (a.titreSection ? '<h2>'+e(a.titreSection)+'</h2>' : '') +
+               '<div class="paves'+(vign?' vignette':'')+'">';
+    a.paves.forEach(function(p){
+      html += '<a class="pave'+(p.pleineLargeur?' large':'')+'" href="'+e(p.lien)+'"'+externe(p.lien)+'>' +
+              (p.image ? '<img src="'+e(p.image)+'" alt="" loading="lazy">' : '') +
+              '<span class="lib">'+e(p.titre)+'</span></a>';
+    });
+    bloc(html + '</div></section>');
+  }
+
+  /* --- Galerie --- */
+  var g = C.galerie;
+  if (g && g.afficher && g.photos && g.photos.length) {
+    var col = (g.colonnes >= 2 && g.colonnes <= 4) ? g.colonnes : 3;
+    var html2 = '<section>' + (g.titreSection ? '<h2>'+e(g.titreSection)+'</h2>' : '') +
+      '<div class="galerie" style="grid-template-columns:repeat('+col+',minmax(0,1fr))">';
+    g.photos.forEach(function(p){
+      var inner = '<img src="'+e(p.image)+'" alt="'+e(p.legende||"")+'" loading="lazy">' +
+                  (p.legende ? '<div class="leg">'+e(p.legende)+'</div>' : '');
+      html2 += p.lien ? '<a class="vign" href="'+e(p.lien)+'"'+externe(p.lien)+'>'+inner+'</a>'
+                      : '<div class="vign">'+inner+'</div>';
+    });
+    html2 += '</div>';
+    if (g.boutonTexte && g.boutonLien)
+      html2 += '<a class="bouton" href="'+e(g.boutonLien)+'"'+externe(g.boutonLien)+'>'+e(g.boutonTexte)+'</a>';
+    bloc(html2 + '</section>');
+  }
+
+  /* --- Infos pratiques --- */
+  var i = C.infos;
+  if (i && i.afficher && i.lignes && i.lignes.length) {
+    var html3 = '<section>' + (i.titreSection ? '<h2>'+e(i.titreSection)+'</h2>' : '') + '<div class="infos">';
+    i.lignes.forEach(function(l){
+      var inner = '<span class="ic">'+e(l.icone||"")+'</span><span class="tx">' +
+                  '<span class="t">'+e(l.titre)+'</span><br>' +
+                  '<span class="d">'+e(l.detail)+'</span></span>';
+      html3 += l.lien ? '<a class="ligne" href="'+e(l.lien)+'"'+externe(l.lien)+'>'+inner+'</a>'
+                      : '<div class="ligne">'+inner+'</div>';
+    });
+    bloc(html3 + '</div></section>');
+  }
+
+  /* --- Liens --- */
+  var L = C.liens;
+  if (L && L.afficher && L.boutons && L.boutons.length) {
+    var html4 = '<section>' + (L.titreSection ? '<h2>'+e(L.titreSection)+'</h2>' : '') + '<div class="liens">';
+    L.boutons.forEach(function(b){
+      html4 += '<a class="lien" href="'+e(b.lien)+'"'+externe(b.lien)+'>'+e(b.texte)+'</a>';
+    });
+    bloc(html4 + '</div></section>');
+  }
+
+  /* --- Pied de page --- */
+  var f = C.piedDePage;
+  if (f && f.afficher) {
+    bloc('<footer>'+e(f.texte||"") +
+         (f.lien ? '<a href="'+e(f.lien)+'"'+externe(f.lien)+'>'+e(f.lienTexte||f.lien)+'</a>' : '') +
+         '</footer>');
+  }
+
+  /* --- Service worker (hors connexion + installation) --- */
+  if ("serviceWorker" in navigator && location.protocol !== "file:") {
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("./sw.js").catch(function(){});
+    });
+  }
+})();
+</script>
+</body>
+</html>
