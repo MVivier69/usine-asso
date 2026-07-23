@@ -27,7 +27,7 @@ window.USINE_CONFIG = {
   alaune: {
     afficher: true,
     titreSection: "À la une",
-    image:   "images/alaune.jpg",
+    image:   "",             /* "" = pas d'image sinon "images/alaune.jpg" */
     date:    "19 et 20 septembre 2026",
     titre:   "Journées du Patrimoine",
     texte:   "l'Usine sera présente pour ces deux journées",
@@ -93,7 +93,7 @@ window.USINE_CONFIG = {
       { image: "images/galerie/photo-3.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/portes-ouvertes-2024" }
     ],
     /* Bouton facultatif sous la galerie ("" = pas de bouton) */
-    boutonTexte: "Voir toutes les photos",
+    boutonTexte: "Secrets de Tonnellerie",
     boutonLien:  "https://www.lusine-belleville.net/photos/secrets-de-tonnellerie"
   },
 
