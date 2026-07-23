@@ -3,7 +3,7 @@
    de index.html ou de sw.js (ex. "usine-v1" -> "usine-v2").
    NOTE : ce n'est PAS nécessaire pour config.js ni pour les images,
    qui sont rechargés automatiquement (voir stratégie plus bas). */
-const CACHE = "usine-v2";
+const CACHE = "usine-v3";
 
 /* Fichiers mis en cache dès l'installation (fonctionnement hors connexion) */
 const ASSETS = [

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diagnostic d'installation — usine-asso</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+       background:#F8F1E1; color:#2D170C; margin:0; padding:18px; line-height:1.45;}
+  .z{max-width:640px;margin:0 auto;}
+  h1{font-size:1.2rem;margin:0 0 4px;}
+  p.s{margin:0 0 18px;color:#6B5A48;font-size:.9rem;}
+  .l{display:flex;gap:10px;padding:10px 12px;background:#fff;border:1px solid #E4D8C2;
+     border-radius:10px;margin-bottom:7px;align-items:flex-start;}
+  .p{flex:0 0 auto;font-weight:700;width:1.4em;text-align:center;}
+  .k{font-weight:600;font-size:.93rem;}
+  .v{font-size:.85rem;color:#6B5A48;overflow-wrap:anywhere;}
+  .ok .p{color:#1E7A3C;} .ko .p{color:#B3261E;} .na .p{color:#8A6D3B;}
+  #verdict{padding:14px;border-radius:12px;background:#fff;border:2px solid #A87848;
+           margin:16px 0;font-size:.95rem;}
+  button{margin-top:10px;padding:12px 16px;background:#7A5230;color:#fff;border:0;
+         border-radius:10px;font:inherit;font-weight:700;cursor:pointer;width:100%;}
+  textarea{width:100%;height:150px;margin-top:10px;font-family:monospace;font-size:.75rem;
+           border:1px solid #E4D8C2;border-radius:8px;padding:8px;}
+</style>
+</head>
+<body><div class="z">
+<h1>Diagnostic d'installation</h1>
+<p class="s">Ouvrez cette page <b>sur le téléphone ou l'ordinateur concerné</b>, à la même adresse que l'application. Analyse en cours, patientez 4 secondes…</p>
+<div id="verdict">Analyse…</div>
+<div id="res"></div>
+<button id="copier" type="button">Copier le rapport</button>
+<textarea id="rapport" readonly></textarea>
+</div>
+
+<script>
+window.__bip = null;
+window.addEventListener("beforeinstallprompt", function(e){ e.preventDefault(); window.__bip = e; });
+</script>
+<script>
+(function(){
+  var res = document.getElementById("res"), lignes = [];
+  function add(etat, cle, val){
+    lignes.push([etat, cle, val]);
+    var c = etat===true?"ok":(etat===false?"ko":"na");
+    var p = etat===true?"\u2713":(etat===false?"\u2717":"\u2013");
+    res.insertAdjacentHTML("beforeend",
+      '<div class="l '+c+'"><span class="p">'+p+'</span><span><span class="k">'+cle+
+      '</span><br><span class="v">'+String(val).replace(/</g,"&lt;")+'</span></span></div>');
+  }
+
+  var ua = navigator.userAgent || "";
+  var iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform==="MacIntel" && navigator.maxTouchPoints>1);
+  var integre = /FBAN|FBAV|FB_IAB|Instagram|Line\/|Twitter|MicroMessenger/i.test(ua);
+  var secure = window.isSecureContext;
+  var standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
+                   || window.navigator.standalone === true;
+  var supporteBip = "onbeforeinstallprompt" in window;
+  var masque = null;
+  try { masque = localStorage.getItem("usine-install-masque"); } catch(e){}
+
+  add(null, "Adresse testée", location.href);
+  add(null, "Navigateur", ua);
+  add(secure, "Contexte sécurisé (HTTPS ou localhost)", secure ? "oui" : "NON — l'installation est impossible sans HTTPS");
+  add(location.protocol !== "file:", "Protocole", location.protocol);
+  add(!standalone, "Application déjà installée ?", standalone ? "OUI — la carte est masquée exprès" : "non");
+  add(masque !== "1", "Carte masquée par l'utilisateur ?", masque === "1" ? "OUI — croix cliquée précédemment" : "non");
+  add(null, "Système détecté", iOS ? "iOS / iPadOS — pas de bouton, instructions Partager (normal)" : "non-iOS");
+  add(!integre, "Navigateur intégré (Facebook/Instagram) ?", integre ? "OUI — installation impossible ici" : "non");
+  add(supporteBip, "Navigateur gérant le bouton automatique",
+      supporteBip ? "oui (Chrome / Edge / Samsung Internet)" : "NON (Safari, Firefox : installation manuelle uniquement)");
+
+  /* Manifeste */
+  var lien = document.querySelector('link[rel="manifest"]');
+  var urlMan = lien ? lien.href : "./manifest.webmanifest";
+  fetch(urlMan).then(function(r){
+    if(!r.ok) throw new Error("HTTP "+r.status);
+    return r.json();
+  }).then(function(m){
+    add(true, "Manifeste accessible", urlMan);
+    var d = ["standalone","fullscreen","minimal-ui"].indexOf(m.display) >= 0;
+    add(d, "display", m.display + (d ? "" : " — doit être standalone / fullscreen / minimal-ui"));
+    var t = (m.icons||[]).map(function(i){return i.sizes;});
+    add(t.indexOf("192x192")>=0 && t.indexOf("512x512")>=0, "Icônes 192 et 512 px", t.join(", ") || "aucune");
+    add(!!m.name && !!m.short_name, "name / short_name", (m.name||"?")+" / "+(m.short_name||"?"));
+  }).catch(function(err){
+    add(false, "Manifeste", "INTROUVABLE ou illisible (" + err.message + ") — " + urlMan);
+  });
+
+  /* Service worker */
+  if (!("serviceWorker" in navigator)) {
+    add(false, "Service worker", "non géré par ce navigateur");
+  } else {
+    navigator.serviceWorker.getRegistrations().then(function(rs){
+      add(rs.length>0, "Service worker enregistré",
+          rs.length>0 ? rs.map(function(r){return r.scope;}).join(", ")
+                      : "AUCUN — ouvrez d'abord l'application (index.html) une fois, puis revenez ici");
+      add(!!navigator.serviceWorker.controller, "Page contrôlée par le service worker",
+          navigator.serviceWorker.controller ? "oui" : "non (normal au tout premier chargement : rechargez)");
+    });
+  }
+
+  /* Invite d'installation : on laisse 4 s au navigateur */
+  setTimeout(function(){
+    var bip = !!window.__bip;
+    add(bip, "Invite d'installation reçue (beforeinstallprompt)",
+        bip ? "OUI — le bouton doit s'afficher dans l'application" : "NON reçue en 4 secondes");
+
+    var v = document.getElementById("verdict"), t;
+    if (standalone)            t = "L'application est <b>déjà installée</b> sur cet appareil. C'est pour cela qu'aucun bouton n'apparaît — c'est le comportement voulu.";
+    else if (masque === "1")   t = "Vous avez <b>fermé la carte</b> par la croix sur cet appareil. Le choix est mémorisé. Videz les données du site pour la revoir.";
+    else if (integre)          t = "Vous êtes dans le <b>navigateur intégré de Facebook ou Instagram</b>. L'installation y est impossible : ouvrez la page dans Safari ou Chrome.";
+    else if (!secure)          t = "La page n'est <b>pas servie en HTTPS</b>. Aucune installation n'est possible dans ces conditions (ni bouton, ni hors connexion).";
+    else if (iOS)             t = "Vous êtes sur <b>iPhone / iPad</b>. Safari ne propose <b>aucun bouton automatique</b> : c'est une limite d'Apple, pas un défaut de l'application. La carte doit afficher la marche à suivre <i>Partager → Sur l'écran d'accueil</i>.";
+    else if (!supporteBip)     t = "Votre navigateur (Safari ou Firefox) <b>ne gère pas le bouton automatique</b>. L'installation se fait par le menu du navigateur, si elle existe.";
+    else if (!bip)             t = "Navigateur compatible mais <b>l'invite n'a pas été émise</b>. Causes usuelles : manifeste ou icônes inaccessibles, service worker non enregistré, ou application déjà installée sur ce profil. Regardez les lignes marquées \u2717 ci-dessus.";
+    else                       t = "Tout est conforme : <b>le bouton « Installer » doit s'afficher</b> dans l'application.";
+    v.innerHTML = t;
+
+    document.getElementById("rapport").value =
+      lignes.map(function(l){ return (l[0]===true?"[OK] ":(l[0]===false?"[KO] ":"[--] ")) + l[1] + " : " + l[2]; }).join("\n");
+  }, 4000);
+
+  document.getElementById("copier").addEventListener("click", function(){
+    var t = document.getElementById("rapport"); t.select();
+    try { navigator.clipboard.writeText(t.value); this.textContent = "Rapport copié"; }
+    catch(e){ this.textContent = "Sélectionnez le texte ci-dessous et copiez-le"; }
+  });
+})();
+</script>
+</body></html>

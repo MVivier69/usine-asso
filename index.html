@@ -339,8 +339,10 @@
       } else if (mode === "ios") {
         picto = PICTO_PARTAGE;
         texte = e(I.texteIOS || "").replace("Partager", "Partager " + PARTAGE_LIGNE);
-      } else {
+      } else if (mode === "integre") {
         texte = e(I.texteNavigateurIntegre || "");
+      } else {
+        texte = e(I.texteAutre || "");
       }
       hote.innerHTML =
         '<section class="install">' +
@@ -375,7 +377,14 @@
     if (window.__inviteInstall)      dessiner("android");
     else if (navIntegre)             dessiner("integre");
     else if (iOS)                    dessiner("ios");
-    /* Sinon : rien. On ne propose pas une installation qui n'aboutirait pas. */
+    else if (I.afficherSiInviteAbsente !== false) {
+      /* Le navigateur peut émettre l'invite avec un léger retard : on lui
+         laisse 2,5 s, puis on bascule sur la marche à suivre manuelle
+         plutôt que de n'afficher rien du tout. */
+      setTimeout(function(){
+        if (!window.__inviteInstall && !hote.firstChild) dessiner("autre");
+      }, 2500);
+    }
 
     window.addEventListener("appinstalled", vider);
   })();

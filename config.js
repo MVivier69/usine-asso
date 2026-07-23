@@ -26,11 +26,11 @@ window.USINE_CONFIG = {
      Une seule mise en avant. lien: "" = carte non cliquable.          */
   alaune: {
     afficher: true,
-    titreSection: "À la Une",
-    image:   "",  /* "" = pas d image sinon images/alaune.jpg */
+    titreSection: "À la une",
+    image:   "images/alaune.jpg",
     date:    "19 et 20 septembre 2026",
     titre:   "Journées du Patrimoine",
-    texte:   "Présence de l'Usine au cours de ces deux journées",
+    texte:   "",
     lien:    "https://www.lusine-belleville.net/ev%C3%A8nements"
   },
 
@@ -41,20 +41,41 @@ window.USINE_CONFIG = {
      pleineLargeur: true -> le pavé occupe toute la largeur.           */
   asso: {
     afficher: true,
-    titreSection: "Association l'Usine",
-    styleImage: "vignette",
+    titreSection: "Association Usine",
+    styleImage: "grande",
     paves: [
       { titre: "Visites", image: "images/asso/visites.jpg",
-        lien: "https://www.lusine-belleville.net/visites" },
+        lien: "https://www.lusine-belleville.net/accueil" },
       { titre: "Usine",   image: "images/asso/usine.jpg",
         lien: "https://www.lusine-belleville.net/usine-roux" },
       { titre: "Presse",  image: "images/asso/presse.jpg",
-        lien: "https://www.lusine-belleville.net/presse" },
+        lien: "https://www.lusine-belleville.net/articles-de-presse" },
       { titre: "Contact", image: "images/asso/contact.jpg",
         lien: "https://www.lusine-belleville.net/contact" },
       { titre: "Site complet", image: "", pleineLargeur: true,
         lien: "https://www.lusine-belleville.net" }
     ]
+  },
+
+  /* --- SECTION « INSTALLER L'APPLICATION » ---------------------------
+     Carte proposant d'ajouter l'app à l'écran d'accueil.
+     Elle disparaît TOUTE SEULE une fois l'application installée.
+     Elle ne s'affiche que si l'installation est réellement possible :
+       • Android / Chrome  -> un bouton « Installer » (invite du système)
+       • iPhone / iPad     -> la marche à suivre (Safari n'a pas d'invite)
+       • navigateur intégré de Facebook/Instagram -> invite à ouvrir Safari
+     position : "haut" (sous la bannière) ou "bas" (avant le pied de page) */
+  installation: {
+    afficher: true,
+    position: "haut",
+    titre: "Installer l'application",
+    texteAndroid: "Ajoutez L'Usine à votre écran d'accueil : ouverture en plein écran et consultation hors connexion.",
+    boutonTexte: "Installer",
+    texteIOS: "Sur iPhone et iPad : touchez le bouton Partager en bas de l'écran, puis « Sur l'écran d'accueil ».",
+    texteNavigateurIntegre: "Pour installer l'application, ouvrez cette page dans Safari (iPhone) ou Chrome (Android) : touchez le menu « … » puis « Ouvrir dans le navigateur ».",
+    texteAutre: "Depuis le menu de votre navigateur, choisissez « Installer l'application » ou « Ajouter à l'écran d'accueil ». Cette option n'existe pas dans tous les navigateurs.",
+    afficherSiInviteAbsente: true,
+    permettreFermeture: true
   },
 
   /* --- SECTION « GALERIE PHOTOS » -----------------------------------
@@ -64,15 +85,15 @@ window.USINE_CONFIG = {
      copier une ligne { ... } avant le crochet ].                       */
   galerie: {
     afficher: true,
-    titreSection: "Galerie Photos",
+    titreSection: "Galerie photos",
     colonnes: 3,
     photos: [
-      { image: "images/galerie/photo-1.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/visites-de-groupes" },
-      { image: "images/galerie/photo-2.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/visite-famille-roux" },
-      { image: "images/galerie/photo-3.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/portes-ouvertes-2024" }
+      { image: "images/galerie/photo-1.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos" },
+      { image: "images/galerie/photo-2.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos" },
+      { image: "images/galerie/photo-3.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos" }
     ],
-    /* Bouton facultatif sous la galerie ("" = pas de bouton sinon Voir toutes les photos) */
-    boutonTexte: "",
+    /* Bouton facultatif sous la galerie ("" = pas de bouton) */
+    boutonTexte: "Voir toutes les photos",
     boutonLien:  "https://www.lusine-belleville.net/photos"
   },
 
@@ -100,7 +121,7 @@ window.USINE_CONFIG = {
     afficher: true,
     titreSection: "Liens",
     boutons: [
-      { texte: "Facebook : l'Usine Belleville en Beaujolais",
+      { texte: "Facebook — l'Usine Belleville en Beaujolais",
         lien: "https://www.facebook.com/groups/2867909900018291" }
     ]
   },
