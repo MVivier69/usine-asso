@@ -30,7 +30,7 @@ window.USINE_CONFIG = {
     image:   "images/alaune.jpg",
     date:    "19 et 20 septembre 2026",
     titre:   "Journées du Patrimoine",
-    texte:   "",
+    texte:   "l'Usine sera présente pour ces deux journées",
     lien:    "https://www.lusine-belleville.net/ev%C3%A8nements"
   },
 
@@ -42,14 +42,14 @@ window.USINE_CONFIG = {
   asso: {
     afficher: true,
     titreSection: "Association Usine",
-    styleImage: "grande",
+    styleImage: "vignette",
     paves: [
       { titre: "Visites", image: "images/asso/visites.jpg",
-        lien: "https://www.lusine-belleville.net/accueil" },
+        lien: "https://www.lusine-belleville.net/visites" },
       { titre: "Usine",   image: "images/asso/usine.jpg",
         lien: "https://www.lusine-belleville.net/usine-roux" },
       { titre: "Presse",  image: "images/asso/presse.jpg",
-        lien: "https://www.lusine-belleville.net/articles-de-presse" },
+        lien: "https://www.lusine-belleville.net/presse" },
       { titre: "Contact", image: "images/asso/contact.jpg",
         lien: "https://www.lusine-belleville.net/contact" },
       { titre: "Site complet", image: "", pleineLargeur: true,
@@ -88,9 +88,9 @@ window.USINE_CONFIG = {
     titreSection: "Galerie photos",
     colonnes: 3,
     photos: [
-      { image: "images/galerie/photo-1.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos" },
-      { image: "images/galerie/photo-2.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos" },
-      { image: "images/galerie/photo-3.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos" }
+      { image: "images/galerie/photo-1.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/visites-de-groupes" },
+      { image: "images/galerie/photo-2.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/visite-famille-roux" },
+      { image: "images/galerie/photo-3.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/portes-ouvertes-2024" }
     ],
     /* Bouton facultatif sous la galerie ("" = pas de bouton) */
     boutonTexte: "Voir toutes les photos",
