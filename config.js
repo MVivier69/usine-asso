@@ -94,7 +94,7 @@ window.USINE_CONFIG = {
     ],
     /* Bouton facultatif sous la galerie ("" = pas de bouton) */
     boutonTexte: "Voir toutes les photos",
-    boutonLien:  "https://www.lusine-belleville.net/photos"
+    boutonLien:  "https://www.lusine-belleville.net/photos/secrets-de-tonnellerie"
   },
 
   /* --- SECTION « INFOS PRATIQUES » ----------------------------------
