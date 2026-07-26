@@ -52,8 +52,8 @@ window.USINE_CONFIG = {
         lien: "https://www.lusine-belleville.net/presse" },
       { titre: "Contact", image: "images/asso/contact.jpg",
         lien: "https://www.lusine-belleville.net/contact" },
-      { titre: "", image: "", pleineLargeur: true,
-        lien: "https://www.lusine-belleville.net" }
+      { titre: "", image: "", pleineLargeur: false,
+        lien: "" }
     ]
   },
 
