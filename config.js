@@ -88,9 +88,9 @@ window.USINE_CONFIG = {
     titreSection: "Galerie photos",
     colonnes: 3,
     photos: [
-      { image: "images/galerie/photo-1.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/visites-de-groupes" },
-      { image: "images/galerie/photo-2.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/visite-famille-roux" },
-      { image: "images/galerie/photo-3.jpg", legende: "", lien: "https://www.lusine-belleville.net/photos/secrets-de-tonnellerie" }
+      { image: "images/galerie/photo-1.jpg", legende: "Visites de groupes", lien: "https://www.lusine-belleville.net/photos/visites-de-groupes" },
+      { image: "images/galerie/photo-2.jpg", legende: "Visite famille Roux", lien: "https://www.lusine-belleville.net/photos/visite-famille-roux" },
+      { image: "images/galerie/photo-3.jpg", legende: "Secrets de tonnellerie", lien: "https://www.lusine-belleville.net/photos/secrets-de-tonnellerie" }
     ],
     /* Bouton facultatif sous la galerie ("" = pas de bouton) */
     boutonTexte: "",
